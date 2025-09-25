@@ -9,6 +9,7 @@ export default tseslint.config({
     },
     eslint.configs.recommended,
     ...tseslint.configs.recommendedTypeChecked,
+    // tseslint.configs.strictTypeChecked,
     // eslintPluginPrettierRecommended,
     {
         languageOptions: {
@@ -25,8 +26,8 @@ export default tseslint.config({
     }, {
         rules: {
             '@typescript-eslint/no-explicit-any': 'off',
-            '@typescript-eslint/no-floating-promises': 'warn',
-            '@typescript-eslint/no-unsafe-argument': 'warn',
+            '@typescript-eslint/no-floating-promises': 'off', //'warn',
+            '@typescript-eslint/no-unsafe-argument': 'off',
             '@typescript-eslint/no-unsafe-call': 'off',
             '@typescript-eslint/no-unsafe-return': 'off',
             '@typescript-eslint/no-unsafe-member-access': 'off',

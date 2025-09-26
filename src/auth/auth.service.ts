@@ -1,17 +1,17 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UsersService } from 'src/users/users.service';
 import { SigninDto } from './dto/signin.dto';
 import { SignupDto } from './dto/signup.dto';
 import { UserDocument } from 'src/users/user.schema';
 import { Response } from 'express';
+import { TokensService } from 'src/tokens/tokens.service';
 
 @Injectable()
 export class AuthService {
     constructor(
         private readonly usersService: UsersService,
-        private readonly jwtService: JwtService,
+        private readonly tokensService: TokensService,
     )   {}
 
     async signin(dto: SigninDto) {
@@ -23,33 +23,22 @@ export class AuthService {
         if(!isMatched)
             throw new UnauthorizedException('Invalid Credentials');
 
-        return this.acquireTokens(user.id as string, user.email);
+        return this.tokensService.acquireTokens(user.id as string, user.email, dto.deviceId);
     }
 
     async signup(dto: SignupDto) {
         const hashedPassword = await this.hashPassword(dto.password);
         const user = await this.usersService.createUser({...dto, hashedPassword});
-        return this.acquireTokens(user.id as string, user.email);
+        return this.tokensService.acquireTokens(user.id as string, user.email, dto.deviceId);
     }
 
 
     async hashPassword(password: string): Promise<string> {
-        return bcrypt.hash(password, 10);
+        return bcrypt.hash(password, 10); // 10 rounds of running hashing algorithm
     }
 
     async comparePasswords(password: string, hash: string): Promise<boolean> {
         return bcrypt.compare(password, hash);
-    }
-
-    async acquireTokens(userId: string, email:  string){
-        const payload = { sub: userId, email: email };
-        const accessToken = await this.jwtService.signAsync(payload, { expiresIn: '15m' });
-        const refreshToken = await this.jwtService.signAsync(payload, { expiresIn: '7d' });      
-        return {accessToken, refreshToken};
-    }
-
-    async refreshToken(refreshToken: string){
-        return refreshToken;
     }
 
     async setAuthCookie(res: Response, refreshToken: string) {

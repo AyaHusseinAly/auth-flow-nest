@@ -3,21 +3,12 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UsersService } from './users.service';
 import { User, UserSchema } from './user.schema';
 import { UsersController } from './users.controller';
-import { JwtModule } from '@nestjs/jwt';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { SharedModule } from 'src/shared/shared.module';
 
 @Module({
   imports:[
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
-
-    JwtModule.registerAsync({
-      imports: [ConfigModule],
-      useFactory: async (config: ConfigService) => ({
-        secret: config.get<string>('JWT_SECRET'),
-        signOptions: { expiresIn: '1h' },
-      }),
-      inject: [ConfigService],
-    }),
+    SharedModule
   ],
   controllers: [UsersController],
   providers: [UsersService],

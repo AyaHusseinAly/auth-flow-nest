@@ -2,23 +2,26 @@ import { Controller, Post, Body, Res } from '@nestjs/common';
 import { SignupDto } from './dto/signup.dto';
 import { SigninDto } from './dto/signin.dto';
 import { AuthService } from './auth.service';
-import type { Response } from 'express';
+import { TokensService } from 'src/tokens/tokens.service';
 
 @Controller('auth')
 export class AuthController {
-    constructor(private readonly autService: AuthService)   {}
+    constructor(
+        private readonly autService: AuthService,
+        private readonly tokensService: TokensService
+    )   {}
 
     @Post('signup')
-    async signup(@Body() dto: SignupDto, @Res({ passthrough: true }) res: Response) {
+    async signup(@Body() dto: SignupDto, @Res({ passthrough: true }) res) {
         const {accessToken, refreshToken} = await this.autService.signup(dto);
-        await this.autService.setAuthCookie(res, refreshToken);
+        await this.tokensService.setAuthCookie(res, refreshToken);
         return {accessToken};        
     }
 
     @Post('signin') 
-    async signin(@Body() dto: SigninDto, @Res({ passthrough: true }) res: Response) {
+    async signin(@Body() dto: SigninDto, @Res({ passthrough: true }) res) {
         const {accessToken, refreshToken} = await this.autService.signin(dto);
-        await this.autService.setAuthCookie(res, refreshToken);
+        await this.tokensService.setAuthCookie(res, refreshToken);
         return {accessToken};
         
     }

@@ -55,26 +55,22 @@ export class TokensService {
 
     async storeTokenInDB(userId:string, refreshToken: string, deviceId: string) {
         const hashedToken = await this.hashToken(refreshToken);
+        await this.deleteTokenFromDB(deviceId)
         return await this.tokensModel.create({ userId, hashedToken, deviceId });
     }
 
     async getTokenFromDB(deviceId: string) {
-        return await this.tokensModel.find({ deviceId });
+        return await this.tokensModel.findOne({ deviceId });
     }
 
+    async deleteTokenFromDB(deviceId: string) {
+        return this.tokensModel.deleteMany({ deviceId });
+    }
+    
     async compareTokens(refreshToken: string, deviceId: string){
-        const tokenRecords = await this.getTokenFromDB(deviceId);
-        return this.isTokenMatch(refreshToken, tokenRecords.map(row=>row.hashedToken));
-    }
-
-    async isTokenMatch(token: string, hashes: string[]): Promise<boolean> {
-        for (const hash of hashes) {
-          const match = await bcrypt.compare(token, hash);
-          if (match) {
-            return true;
-          }
-        }
-        return false; // No matches found
+        const tokenRecord = await this.getTokenFromDB(deviceId);
+        if(!tokenRecord) return false;
+        return bcrypt.compare(refreshToken,tokenRecord.hashedToken);
     }
 
     async getPayloadFromToken(token: string):Promise<JwtPayload>{

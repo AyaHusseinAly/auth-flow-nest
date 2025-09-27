@@ -1,6 +1,6 @@
 # 🔐 Auth Flow NestJS
 
-A robust, production-ready authentication backend built with NestJS, featuring JWT-based authentication with refresh token rotation and device-based session management.
+A  production-ready authentication backend built with NestJS, featuring JWT-based authentication with refresh token rotation and device-based session management.
 
 [![NestJS](https://img.shields.io/badge/NestJS-E0234E?style=for-the-badge&logo=nestjs&logoColor=white)](https://nestjs.com/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
@@ -90,6 +90,52 @@ Authenticate user and receive tokens.
 ```json
 {
   "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+```
+
+#### POST `/tokens/refresh`
+Refresh access token using refresh token from HTTP-only cookie.
+
+**Request Body:**
+```json
+{
+  "deviceId": "550e8400-e29b-41d4-a716-446655440000"
+}
+```
+
+**Response:**
+```json
+{
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+```
+
+**Note:** Refresh token is automatically sent via HTTP-only cookie and updated in response.
+
+### User Endpoints
+
+#### POST `/users/profile` 🔒
+Get user profile information (Protected Route).
+
+**Headers:**
+```
+Authorization: Bearer <access_token>
+```
+
+**Request Body:**
+```json
+{
+  "userId": "user_id_here"
+}
+```
+
+**Response:**
+```json
+{
+  "sub": "user_id",
+  "email": "user@example.com",
+  "iat": 1234567890,
+  "exp": 1234567890
 }
 ```
 

@@ -8,7 +8,6 @@ export class UsersController {
     @Get('profile')
     async profile(@Req() req: Request) {
         return req['user'];        
-
     }
 
 

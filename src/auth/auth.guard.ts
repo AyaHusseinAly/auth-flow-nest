@@ -16,6 +16,10 @@ export class AuthGuard implements CanActivate {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
+    return this.handleJwt(context);
+  }
+
+  async handleJwt(context:ExecutionContext) {
     const request = context.switchToHttp().getRequest<Request>();
     const authHeader = request.headers['authorization'];
 
@@ -29,7 +33,7 @@ export class AuthGuard implements CanActivate {
 
     const accessToken = authHeader.split(' ')[1]; 
     try {
-      const payload = this.jwtService.verifyAsync(accessToken, {secret: this.configService.get<string>('JWT_SECRET')});
+      const payload = await this.jwtService.verifyAsync(accessToken, {secret: this.configService.get<string>('JWT_SECRET')});
       request['user'] = payload;
       return true;
     } catch {

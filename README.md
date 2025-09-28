@@ -2,11 +2,6 @@
 
 A  production-ready authentication backend built with NestJS, featuring JWT-based authentication with refresh token rotation and device-based session management.
 
-[![NestJS](https://img.shields.io/badge/NestJS-E0234E?style=for-the-badge&logo=nestjs&logoColor=white)](https://nestjs.com/)
-[![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=JSON%20web%20tokens&logoColor=white)](https://jwt.io/)
-
 ## ✨ Features
 
 - 🔐 **JWT Authentication** with access & refresh tokens
@@ -16,8 +11,7 @@ A  production-ready authentication backend built with NestJS, featuring JWT-base
 - 🍪 **HTTP-only Cookies** for secure token storage
 - ✅ **Input Validation** with class-validator
 - 🗄️ **MongoDB Integration** with Mongoose ORM
-- 🌐 **CORS Configuration** for frontend integration
-- 📝 **Comprehensive Logging** and error handling
+
 
 ## 🚀 Quick Start
 

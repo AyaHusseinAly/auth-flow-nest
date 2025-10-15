@@ -15,7 +15,7 @@ async function bootstrap() {
 
   app.use(cookieParser());
   app.enableCors({
-    origin: "http://localhost:5173", // local frontend domain
+    origin: ["http://localhost:5173","https://auth-flow-react.onrender.com"], // local frontend domain
     credentials: true,
   });
   await app.listen(process.env.PORT ?? 3000);

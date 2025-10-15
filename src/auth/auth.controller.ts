@@ -33,7 +33,7 @@ export class AuthController {
         res.clearCookie('refresh_token', {
             httpOnly: true,
             secure: true,
-            sameSite: 'strict',
+            sameSite: 'none',
         });
         
         return { message: 'Signed out successfully' };;
